@@ -5,6 +5,8 @@ import { client } from './Apollo';
 import App from './App';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core';
 import { deepOrange } from '@material-ui/core/colors';
+import { Provider } from 'react-redux';
+import store from './store/store';
 
 const theme = createMuiTheme({
   palette: {
@@ -15,14 +17,14 @@ const theme = createMuiTheme({
   }
 });
 
-console.log(theme)
-
 ReactDOM.render(
   <React.StrictMode>
     <ApolloProvider client={client}>
-      <MuiThemeProvider theme={theme}>
-        <App />
-      </MuiThemeProvider>
+      <Provider store={store}>
+        <MuiThemeProvider theme={theme}>
+          <App />
+        </MuiThemeProvider>
+      </Provider>
     </ApolloProvider>
   </React.StrictMode>,
   document.getElementById('root')
