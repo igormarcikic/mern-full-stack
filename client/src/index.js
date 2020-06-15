@@ -13,9 +13,10 @@ const theme = createMuiTheme({
     primary: deepOrange
   },
   appBar: {
-    height: 65
+    height: '65px'
   }
 });
+
 
 ReactDOM.render(
   <React.StrictMode>

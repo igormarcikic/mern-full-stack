@@ -3,8 +3,8 @@ import PostCard from '../components/PostCard';
 import { makeStyles } from '@material-ui/core/styles';
 import {
     Container,
-    Grid,
-    Paper
+	Grid,
+	Typography
 } from '@material-ui/core';
 import { useQuery } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
@@ -27,16 +27,14 @@ const useStyles = makeStyles((theme) => ({
 const Home = () => {
 	const classes = useStyles();
 	const { loading, error, data } = useQuery(FETCH_POSTS_QUERY);
-	
-	if(data) {
-		console.log(data)
-	}
 
     return (
         <Container className={classes.root}>
             <Grid container spacing={3} className={classes.gridContainer}>
             { loading ? (
-            		<h1>Loading...</h1>
+            		<Typography variant="h3" component="h1" gutterBottom>
+						Loading...
+                	</Typography>
             	) : (
             		data.getPosts && data.getPosts.map( post => (
             			<Grid item xs={4} key={post.id}>
