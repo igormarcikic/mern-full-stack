@@ -10,6 +10,8 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { useSelector, useDispatch } from 'react-redux';
 import { loginUser } from '../store/actions/loginUser';
+import { gql } from 'apollo-boost';
+import { useMutation } from '@apollo/react-hooks';
 
 //Input fields validation schema
 const LoginSchema = Yup.object().shape({
@@ -51,15 +53,19 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
 
-const Register = () => {
+const Login = () => {
+
+    const [ login, { data }] = useMutation(LOGIN_MUTATION);
 
     const CurrentUser = useSelector(state=>state.CurrentUser);
     const dispatch = useDispatch();
     const classes = useStyles();
 
-    const logMeIn = (values, setSubmitting) => {
-        console.log(values);
-        dispatch(loginUser);
+    const logMeIn = ({ username, password }, setSubmitting) => {
+        console.log(username, password)
+        login({ variables: { username, password }});
+        console.log(data)
+        // dispatch(loginUser);
         setSubmitting(false);
     };
 
@@ -70,9 +76,9 @@ const Register = () => {
                     Please Login:
                 </Typography>
                 <Formik 
-                    initialValues={{ email: '', password: '', confirmPassword: '' }}
+                    initialValues={{ username: '', password: ''}}
                     validationSchema={LoginSchema}
-                    onSubmit={(values, { setSubmitting }) => {
+                    onSubmit={(values, { setSubmitting,  }) => {
                     logMeIn(values, setSubmitting);
                     }}
                     >
@@ -93,15 +99,15 @@ const Register = () => {
                             <TextField
                                 className={classes.textF}
                                 variant="outlined"
-                                label="Enter your email address"
-                                type="email"
-                                name="email"
+                                label="Enter your username"
+                                type="username"
+                                name="username"
                                 onChange={handleChange}
                                 onBlur={handleBlur}
-                                value={values.email}
-                                helperText={errors.email && touched.email && errors.email}
+                                value={values.username}
+                                helperText={errors.username && touched.username && errors.username}
                                 margin="dense"
-                                error={(errors.email && touched.email && errors.email) ? true : false}
+                                error={(errors.username && touched.username && errors.username) ? true : false}
                             />
                             <TextField
                                 className={classes.textF}
@@ -115,19 +121,6 @@ const Register = () => {
                                 helperText={errors.password && touched.password && errors.password}
                                 margin="dense"
                                 error={(errors.password && touched.password && errors.password) ? true : false}
-                            />
-                            <TextField
-                                className={classes.textF}
-                                variant="outlined"
-                                label="Confirm password."
-                                type="password"
-                                name="confirmPassword"
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                value={values.confirmPassword}
-                                helperText={errors.confirmPassword && touched.confirmPassword && errors.confirmPassword}
-                                margin="dense"
-                                error={(errors.confirmPassword && touched.confirmPassword && errors.confirmPassword) ? true : false}
                             />
                             <Button 
                                 type="submit" 
@@ -146,4 +139,12 @@ const Register = () => {
     )
 };
 
-export default Register;
+const LOGIN_MUTATION = gql`
+    mutation LogMeIn($username: String! $password: String!) {
+        login(username: $username password: $password ) {
+            id username email token
+        }
+    }
+`;
+
+export default Login;

@@ -14,32 +14,6 @@ const generateToken = (user) => {
 }
 
 const userResolvers = {
-    Query: {
-        login: async (parent, { username, password }, context, info) => {
-            const { valid, errors } = validateLoginInput(username, password);
-            if(!valid) throw new UserInputError('Errors', {errors});
-            const user = await User.findOne({username});
-
-            if(!user) {
-                errors.general = 'User not found';
-                throw new UserInputError('User not found', {errors});
-            }
-
-            const match = await bcrypt.compare(password, user.password);
-            if(!match) {
-                errors.general = 'Wrong credentials';
-                throw new UserInputError('Wrong credentials', {errors});
-            };
-
-            const token = generateToken(user);
-
-            return {
-                ...user._doc,
-                id: user._id,
-                token
-            };
-        }
-    },
     Mutation: {
         register: async (parent, { registerInput: { username, email, password, confirmPassword }}, context, info) => {
             // User input validation
@@ -70,6 +44,30 @@ const userResolvers = {
                 id: res._id,
                 token
             }
+        },
+        login: async (parent, { username, password }, context, info) => {
+            const { valid, errors } = validateLoginInput(username, password);
+            if(!valid) throw new UserInputError('Errors', {errors});
+            const user = await User.findOne({username});
+
+            if(!user) {
+                errors.general = 'User not found';
+                throw new UserInputError('User not found', {errors});
+            }
+
+            const match = await bcrypt.compare(password, user.password);
+            if(!match) {
+                errors.general = 'Wrong credentials';
+                throw new UserInputError('Wrong credentials', {errors});
+            };
+
+            const token = generateToken(user);
+
+            return {
+                ...user._doc,
+                id: user._id,
+                token
+            };
         }
     }
 };

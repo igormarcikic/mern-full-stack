@@ -6,7 +6,9 @@ import {
 const Register = () => {
     return (
         <Container>
-            Register
+            <form>
+                <input type="text"/>
+            </form>
         </Container>
     )
 };
