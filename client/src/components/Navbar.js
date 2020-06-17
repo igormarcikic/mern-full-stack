@@ -8,7 +8,9 @@ import {
     IconButton,
 } from '@material-ui/core/';
 import MenuIcon from '@material-ui/icons/Menu';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { logoutUser } from '../store/actions/userActions';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -25,8 +27,12 @@ const useStyles = makeStyles((theme) => ({
 const Navbar = (props) => {
 
     const classes = useStyles();
-    const history = useHistory();
-    
+    const CurrentUser = useSelector(state => state.CurrentUser);
+    const dispatch = useDispatch();
+
+    const logOut = () => {
+        dispatch(logoutUser());
+    };
 
     return (
         <div className={classes.root}>
@@ -38,8 +44,15 @@ const Navbar = (props) => {
             <Typography variant="h6" className={classes.title}>
                 <Button color="inherit" component={Link} to={"/"}>My App</Button>
             </Typography>
-            <Button color="inherit" component={Link} to={"/login"}>Login</Button>
-            <Button color="inherit" component={Link} to={"/register"}>Register</Button>
+            { !CurrentUser.loggedIn ? (
+                <>
+                    <Button color="inherit" component={Link} to={"/login"}>Login</Button>
+                    <Button color="inherit" component={Link} to={"/register"}>Register</Button>
+                </>
+            ): (
+                <Button color="inherit" onClick={logOut}>Logout</Button>
+            )}
+            
             </Toolbar>
         </AppBar>
         </div>
@@ -47,3 +60,4 @@ const Navbar = (props) => {
 }
 
 export default Navbar;
+

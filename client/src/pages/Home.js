@@ -6,6 +6,7 @@ import {
 	Grid,
 	Typography
 } from '@material-ui/core';
+import { useSelector, useDispatch } from 'react-redux';
 import { useQuery } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
 
@@ -26,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Home = () => {
 	const classes = useStyles();
+  const CurrentUser = useSelector(state=>state.CurrentUser);
 	const { loading, error, data } = useQuery(FETCH_POSTS_QUERY);
 
     return (
@@ -36,11 +38,11 @@ const Home = () => {
 						Loading...
                 	</Typography>
             	) : (
-            		data.getPosts && data.getPosts.map( post => (
+            		data.getPosts && data.getPosts.map( post => 
             			<Grid item xs={4} key={post.id}>
-				        	<PostCard post={post} />
-			        	</Grid>
-        			))
+				        	 <PostCard post={post} />
+			        	  </Grid>
+        			 )
             	)}
 		        
 	     	</Grid>
