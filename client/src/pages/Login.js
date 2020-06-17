@@ -62,6 +62,7 @@ const Login = () => {
         const res = await login({ variables: { username, password }});
         dispatch(loginUser(res));
         setSubmitting(false);
+        localStorage.setItem('token', res.data.login.token);
         history.push('/');
     };
 

@@ -31,6 +31,7 @@ const Navbar = (props) => {
     const dispatch = useDispatch();
 
     const logOut = () => {
+        localStorage.removeItem('token');
         dispatch(logoutUser());
     };
 

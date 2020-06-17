@@ -27,9 +27,9 @@ const useStyles = makeStyles((theme) => ({
 
 const Home = () => {
 	const classes = useStyles();
-  const CurrentUser = useSelector(state=>state.CurrentUser);
+  	const CurrentUser = useSelector(state=>state.CurrentUser);
 	const { loading, error, data } = useQuery(FETCH_POSTS_QUERY);
-
+console.log(error, data)
     return (
         <Container className={classes.root}>
             <Grid container spacing={3} className={classes.gridContainer}>
@@ -38,7 +38,7 @@ const Home = () => {
 						Loading...
                 	</Typography>
             	) : (
-            		data.getPosts && data.getPosts.map( post => 
+            		data.getUserPosts && data.getUserPosts.map( post => 
             			<Grid item xs={4} key={post.id}>
 				        	 <PostCard post={post} />
 			        	  </Grid>
@@ -52,7 +52,7 @@ const Home = () => {
 
 const FETCH_POSTS_QUERY = gql`
 	{
-		getPosts {
+		getUserPosts {
 			id 
 			title
 			body 

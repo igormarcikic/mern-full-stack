@@ -71,6 +71,7 @@ const Register = () => {
     	resetForm();
     	dispatch(registerUser(res))
     	setSubmitting(false);
+        localStorage.setItem('token', res.data.login.token);
         history.push('/');
     };
 

@@ -12,6 +12,15 @@ const postResolvers = {
                 throw new Error(err)
             }
         },
+        getUserPosts: async (parent, props, context, info) => {
+            const user = checkAuth(context);
+            const posts = await Post.find();
+
+            const authorPosts = posts.filter(post => post.username === user.username);
+
+            return authorPosts;
+
+        },
         getPost: async (parent, { postId }, context, info) => {
             try {
                 if (!postId.match(/^[0-9a-fA-F]{24}$/)) throw new Error('Invalid post ID');

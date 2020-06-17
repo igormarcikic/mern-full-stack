@@ -30,6 +30,7 @@ const typeDefs = gql`
     }
     type Query {
         getPosts: [Post]
+        getUserPosts: [Post]
         getPost(postId: String!): Post!
     }
     type Mutation {
