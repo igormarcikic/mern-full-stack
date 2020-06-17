@@ -8,11 +8,18 @@ import {
 import { makeStyles } from '@material-ui/core';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+<<<<<<< HEAD
 import { useDispatch } from 'react-redux';
 import { loginUser } from '../store/actions/userActions';
 import { gql } from 'apollo-boost';
 import { useMutation } from '@apollo/react-hooks';
 import { useHistory } from 'react-router-dom';
+=======
+import { useSelector, useDispatch } from 'react-redux';
+import { loginUser } from '../store/actions/loginUser';
+import { gql } from 'apollo-boost';
+import { useMutation } from '@apollo/react-hooks';
+>>>>>>> 531cabedd1e80c3657f2bf18d0361061e2599ec5
 
 //Input fields validation schema
 const LoginSchema = Yup.object().shape({
