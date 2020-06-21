@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
     Container,
     TextField,
@@ -6,6 +6,7 @@ import {
     Typography
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core';
+import Alert from '@material-ui/lab/Alert';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
@@ -60,19 +61,30 @@ const useStyles = makeStyles((theme) => ({
 
 const Register = () => {
 
-    const [ register, { data }] = useMutation(REGISTER_MUTATION);
+    const [ errors, setErrors ] = useState({});
+
+    const [ register, { data }] = useMutation(REGISTER_MUTATION, {
+        onError(err) {
+            console.log(err.graphQLErrors[0])
+            setErrors(err.graphQLErrors[0].extensions.exception.errors);
+        }
+    });
     const history = useHistory();
 
     const dispatch = useDispatch();
     const classes = useStyles();
 
     const registerMe = async ({username, email, password, confirmPassword}, setSubmitting, resetForm ) => {
-    	const res = await register({variables: {username, email, password, confirmPassword}})
-    	resetForm();
-    	dispatch(registerUser(res))
-    	setSubmitting(false);
-        localStorage.setItem('token', res.data.login.token);
-        history.push('/');
+    	try {
+            const res = await register({variables: {username, email, password, confirmPassword}})
+            dispatch(registerUser(res))
+            setSubmitting(false);
+            localStorage.setItem('token', res.data.register.token);
+            history.push('/');
+        } catch(err) {
+            setSubmitting(false);
+        }
+        
     };
 
     return (
@@ -166,6 +178,12 @@ const Register = () => {
                         </form>
                     )}
                 </Formik>
+                {
+                    Object.keys(errors).length === 0 ? null : ( Object.values(errors).map(err => (
+                        <Alert severity="error" className={classes.alert} key={err}>{err}</Alert>
+                    ))
+                )
+                }
             </div>
         </Container>
     )

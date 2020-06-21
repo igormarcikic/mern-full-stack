@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
     Container,
     TextField,
     Button,
     Typography
 } from '@material-ui/core';
+import Alert from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/core';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -47,23 +48,39 @@ const useStyles = makeStyles((theme) => ({
     button: {
         marginTop: '8px',
         marginBottom: '4px'
+    },
+    alert: {
+        marginTop: theme.spacing(2)
     }
   }));
 
 const Login = () => {
 
-    const [ login, { data }] = useMutation(LOGIN_MUTATION);
+    const [ errors, setErrors ] = useState({});
+
+    const [ login, { data }] = useMutation(LOGIN_MUTATION, {
+        onError(err) {
+            console.log(err.graphQLErrors[0])
+            setErrors(err.graphQLErrors[0].extensions.exception.errors);
+        }
+    });
     const history = useHistory();
 
     const dispatch = useDispatch();
     const classes = useStyles();
 
     const logMeIn = async ({ username, password }, setSubmitting, resetForm ) => {
-        const res = await login({ variables: { username, password }});
-        dispatch(loginUser(res));
-        setSubmitting(false);
-        localStorage.setItem('token', res.data.login.token);
-        history.push('/');
+        try {
+            const res = await login({ variables: { username, password }});
+            dispatch(loginUser(res));
+            setSubmitting(false);
+            resetForm();
+            localStorage.setItem('token', res.data.login.token);
+            history.push('/');
+        } catch(err) {
+            setSubmitting(false);
+        }
+        
     };
 
     return (
@@ -131,6 +148,12 @@ const Login = () => {
                         </form>
                     )}
                 </Formik>
+                {
+                    Object.keys(errors).length === 0 ? null : ( Object.values(errors).map(err => (
+                        <Alert severity="error" className={classes.alert} key={err}>{err}</Alert>
+                    ))
+                )
+                }
             </div>
         </Container>
     )

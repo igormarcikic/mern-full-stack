@@ -26,10 +26,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Home = () => {
-	const classes = useStyles();
+    const classes = useStyles();
   	const CurrentUser = useSelector(state=>state.CurrentUser);
-	const { loading, error, data } = useQuery(FETCH_POSTS_QUERY);
-console.log(error, data)
+    const { loading, error, data } = useQuery(FETCH_POSTS_QUERY);
     return (
         <Container className={classes.root}>
             <Grid container spacing={3} className={classes.gridContainer}>

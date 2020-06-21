@@ -21,10 +21,18 @@ const userResolvers = {
             if(!valid) throw new UserInputError('Errors', { errors });
 
             // Avoid duplicate user
-            const user = await User.findOne({username});
-            if(user) throw new UserInputError('Username taken', {
+            const usernameCheck = await User.findOne({username});
+            if(usernameCheck) throw new UserInputError('Username taken', {
                 errors: {
                     username: 'Username taken'
+                }
+            });
+
+            // Avoid duplicate email
+            const emailCheck = await User.findOne({email});
+            if(emailCheck) throw new UserInputError('Email taken', {
+                errors: {
+                    email: 'Email taken'
                 }
             });
 
