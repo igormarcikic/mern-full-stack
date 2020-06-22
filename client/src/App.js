@@ -6,6 +6,7 @@ import Register from './pages/Register';
 import Login from './pages/Login';
 import Navbar from './components/Navbar';
 import ProtectedRoute from './ProtectedRoute';
+import SinglePost from './pages/SinglePost';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
             </ProtectedRoute>
             <Route exact path="/login" component={Login} />
             <Route exact path="/register" component={Register} />
+            <Route exact path={'/post/:postId'} component={SinglePost} />
           </Switch>
       </Router>
     
