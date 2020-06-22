@@ -11,8 +11,8 @@ import {
   Typography
 } from '@material-ui/core/';
 import { red } from '@material-ui/core/colors';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import ShareIcon from '@material-ui/icons/Share';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
@@ -28,6 +28,9 @@ const useStyles = makeStyles((theme) => ({
   avatar: {
     backgroundColor: red[500],
   },
+  actions: {
+    justifyContent: 'center'
+  }
 }));
 
 const PostCard = ({ post: { id, title, body, createdAt, username, comments } }) => {
@@ -61,12 +64,12 @@ const PostCard = ({ post: { id, title, body, createdAt, username, comments } }) 
           {body}
         </Typography>
       </CardContent>
-      <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites">
-          <FavoriteIcon />
+      <CardActions className={classes.actions} disableSpacing>
+        <IconButton aria-label="delete">
+          <DeleteIcon color="error" />
         </IconButton>
-        <IconButton aria-label="share">
-          <ShareIcon />
+        <IconButton aria-label="edit">
+          <EditIcon color="primary" />
         </IconButton>
       </CardActions>
     </Card>
